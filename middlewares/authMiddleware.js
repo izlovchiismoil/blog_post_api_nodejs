@@ -37,12 +37,14 @@ export async function chekAdminRole (req, res, next) {
                 error: "Token invalid"
             });
         }
-        if (decodedAccessToken.userRole !== "admin") {
+        if (decodedAccessToken.userRole === "admin") {
+            next();
+        }
+        else {
             return res.status(403).json({
                 error: "Access denied"
             });
         }
-        next();
     }
     catch (err) {
         return res.status(401).json({
@@ -66,12 +68,15 @@ export async function chekAuthorRole (req, res, next) {
                 error: "Token invalid"
             });
         }
-        if (decodedAccessToken.userRole !== "admin" || decodedAccessToken.userRole !== "author") {
+        if (decodedAccessToken.userRole === "author" || decodedAccessToken.userRole === "admin") {
+            next();
+        }
+        else {
             return res.status(403).json({
                 error: "Access denied"
             });
         }
-        next();
+
     }
     catch (err) {
         return res.status(401).json({

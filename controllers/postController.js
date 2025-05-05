@@ -25,7 +25,7 @@ export async function createPost (req, res) {
             });
         }
         return res.status(201).json({
-            data: createdPost
+            createdPost
         });
     }
     catch (err) {
@@ -53,7 +53,7 @@ export async function updatePost (req, res) {
             );
         const updatedPost = await models.post.findByPk(requestPostId);
         return res.status(201).json({
-            data: updatedPost
+            updatedPost
         });
     }
     catch (err) {
@@ -106,7 +106,7 @@ export async function getAllPosts (req, res) {
             });
         }
         return res.status(200).json({
-            data: posts
+            posts
         });
     }
     catch (err) {
@@ -121,7 +121,8 @@ export async function getPostById (req, res) {
                 model: User,
                 key: "id"
             }],
-            raw: true
+            raw: true,
+            nest: true
         });
         if (!post) {
             return res.status(404).json({
@@ -129,7 +130,7 @@ export async function getPostById (req, res) {
             });
         }
         return res.status(200).json({
-            data: post
+            post
         });
     }
     catch (err) {

@@ -23,13 +23,13 @@ export async function createUser (req, res) {
         }
         requestUserData.password = await bcryptjs.hash(requestUserData.password, 10);
         requestUserData.role = requestUserData.role.toLowerCase();
-        const createdUser = await models.user.create(requestUserData);
-        const newUser = createdUser.toJSON();
-        delete newUser.username;
-        delete newUser.password;
-        delete newUser.role;
+        const newUser = await models.user.create(requestUserData);
+        const createdUser = newUser.toJSON();
+        delete createdUser.username;
+        delete createdUser.password;
+        delete createdUser.role;
         return res.status(201).json({
-            data: newUser
+            createdUser
         });
     }
     catch (err) {
@@ -57,7 +57,7 @@ export async function getUserById (req, res) {
             });
         }
         return res.status(200).json({
-            data: user
+            user
         });
     }
     catch (err) {
@@ -78,7 +78,7 @@ export async function getAllUsers (req, res) {
             });
         }
         return res.status(200).json({
-            data: users
+            users
         });
     }
     catch (err) {
@@ -123,7 +123,7 @@ export async function updateUser (req, res) {
         });
 
         return res.status(200).json({
-            data: updatedUser
+            updatedUser
         });
     }
     catch (err) {
@@ -146,7 +146,7 @@ export async function deleteUser (req, res) {
             where: { id: requestUserId },
         });
         return res.status(200).json({
-            data: user
+            user
         });
     }
     catch (err) {

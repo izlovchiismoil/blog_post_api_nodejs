@@ -19,11 +19,11 @@ export async function createCategory(req, res) {
                 error: 'Category already exists'
             });
         }
-        const newCategory = await models.category.create({
+        const createdCategory = await models.category.create({
             title: requestCategoryData.title
         });
         return res.status(201).json({
-            data: newCategory
+            createdCategory
         });
     }
     catch (err) {
@@ -39,7 +39,7 @@ export async function getAllCategories(req, res) {
             });
         }
         return res.status(200).json({
-            data: categories
+            categories
         });
     }
     catch (err) {
@@ -59,7 +59,7 @@ export async function getCategoryById(req, res) {
             });
         }
         return res.status(200).json({
-            data: category
+            category
         });
     }
     catch (err) {
@@ -87,7 +87,7 @@ export async function updateCategory(req, res) {
         );
         const updatedCategory = await models.category.findByPk(requestCategoryId);
         return res.status(200).json({
-            data: updatedCategory
+            updatedCategory
         });
     }
     catch (err) {
@@ -112,7 +112,7 @@ export async function deleteCategory(req, res) {
             }
         });
         return res.status(200).json({
-            data: category
+            category
         });
     }
     catch (err) {

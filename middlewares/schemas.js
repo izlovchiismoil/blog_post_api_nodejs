@@ -26,16 +26,16 @@ export const updateUserSchema = Joi.object({
 // Posts schemas
 export const createPostSchema = Joi.object({
     title: Joi.string().required(),
-    description: Joi.string().required(),
-    text: Joi.string().required(),
+    shortTitle: Joi.string().required(),
+    content: Joi.string().required(),
     authorId: Joi.number().required(),
     categoryId: Joi.number().required(),
     imageUrl: Joi.string().uri().required()
 });
 export const updatePostSchema = Joi.object({
     title: Joi.string().optional(),
-    description: Joi.string().optional(),
-    text: Joi.string().optional(),
+    shortTitle: Joi.string().optional(),
+    content: Joi.string().optional(),
     authorId: Joi.number().required(),
     categoryId: Joi.number().optional(),
     imageUrl: Joi.string().uri().optional()

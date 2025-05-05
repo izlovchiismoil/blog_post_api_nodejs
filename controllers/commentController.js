@@ -16,7 +16,7 @@ export async function createComment (req, res) {
             });
         }
         return res.status(201).json({
-            data: createdComment
+            createdComment
         });
     }
     catch (err) {
@@ -36,7 +36,7 @@ export async function getAllComments (req, res) {
             });
         }
         return res.status(200).json({
-            data: comments
+            comments
         });
     }
     catch (err) {
@@ -57,7 +57,7 @@ export async function getCommentById (req, res) {
             });
         }
         return res.status(200).json({
-            data: comment
+            comment
         });
     }
     catch (err) {
@@ -87,7 +87,7 @@ export async function getAllCommentsByPostId (req, res) {
             });
         }
         return res.status(200).json({
-            data: comments
+            comments
         });
     }
     catch (err) {

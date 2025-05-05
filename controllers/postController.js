@@ -116,7 +116,13 @@ export async function getAllPosts (req, res) {
 export async function getPostById (req, res) {
     try {
         const requestPostId = req.params.id;
-        const post = await models.post.findByPk(requestPostId, { raw: true });
+        const post = await models.post.findByPk(requestPostId, {
+            include: [{
+                model: User,
+                key: "id"
+            }],
+            raw: true
+        });
         if (!post) {
             return res.status(404).json({
                 error: 'Post not found'

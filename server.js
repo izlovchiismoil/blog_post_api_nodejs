@@ -15,13 +15,16 @@ import categoryRouter from "./routes/categoryRoute.js";
 import commentRouter from "./routes/commentRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { defaults } from "./utils/defaults.js";
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
 app.use(cookieParser());
 app.use(helmet());
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 1000,
     message: "Too many requests from this IP. Please try again later."
 });
 app.use(limiter);

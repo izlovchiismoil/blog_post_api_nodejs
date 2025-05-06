@@ -4,8 +4,8 @@ import bcryptjs from "bcryptjs";
 const defaultUser = {
     firstName: "Admin",
     lastName: "Admin",
-    username: "admin",
-    password: "admin",
+    username: process.env.SUPER_USERNAME || "admin",
+    password: process.env.SUPER_PASSWORD || "admin",
     imageUrl: null,
     role: "admin"
 };

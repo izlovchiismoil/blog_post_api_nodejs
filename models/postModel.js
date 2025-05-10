@@ -10,15 +10,15 @@ const Post = sequelize.define("posts", {
         allowNull: false
     },
     title: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
     },
     shortTitle: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
     },
     content: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false
     },
     authorId: {
@@ -38,7 +38,7 @@ const Post = sequelize.define("posts", {
         }
     },
     imageUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
     }
 }, { timestamps: true, freezeTableName: true });

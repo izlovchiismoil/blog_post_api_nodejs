@@ -19,13 +19,14 @@ import {
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {
     authenticate,
-    chekAdminRole
+    chekAdminRole,
+    chekAuthorRole
 } from "../middlewares/authMiddleware.js";
 
 userRouter.post("/create", createUserValidate(createUserSchema), authenticate, chekAdminRole, createUser);
 userRouter.get("/all", authenticate, chekAdminRole, getAllUsers);
-userRouter.get("/:id", idValidate(idSchema), authenticate, chekAdminRole, getUserById);
-userRouter.patch("/:id", idValidate(idSchema), updateUserValidate(updateUserSchema), authenticate, chekAdminRole, updateUser);
+userRouter.get("/:id", idValidate(idSchema), authenticate, chekAuthorRole, chekAdminRole, getUserById);
+userRouter.patch("/:id", idValidate(idSchema), updateUserValidate(updateUserSchema), authenticate, chekAuthorRole, chekAdminRole, updateUser);
 userRouter.delete("/:id", idValidate(idSchema), authenticate, chekAdminRole, deleteUser);
 
 export default userRouter;

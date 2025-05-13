@@ -48,7 +48,7 @@ export async function getUserById (req, res) {
             });
         }
         const user = await models.user.findByPk(requestUserId, {
-            attributes: { exclude: ['username','password', 'role'] },
+            attributes: { exclude: ['password'] },
             raw: true
         });
         if (!user) {
@@ -64,13 +64,13 @@ export async function getUserById (req, res) {
         console.log(err);
         return res.status(500).json({
             error: err.message
-        })
+        });
     }
 }
 export async function getAllUsers (req, res) {
     try {
         const users = await models.user.findAll({
-            attributes: { exclude: ['username', 'password', 'role'], raw: true },
+            attributes: { exclude: ['password'], raw: true },
         });
         if (!users || users.length === 0) {
             return res.status(404).send({

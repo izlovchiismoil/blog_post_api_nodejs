@@ -5,7 +5,8 @@ import {
     deletePost,
     getAllPosts,
     getPostById,
-    updatePost
+    updatePost,
+    getPostsByCategoryId
 } from "../controllers/postController.js";
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {
@@ -19,14 +20,14 @@ import {
 } from "../middlewares/schemas.js";
 import {
     authenticate,
-    chekAdminRole,
-    chekAuthorRole
+    checkRole,
 } from "../middlewares/authMiddleware.js";
 
-postRouter.post("/create", createPostValidate(createPostSchema), authenticate, chekAuthorRole, chekAdminRole, createPost);
+postRouter.post("/create", createPostValidate(createPostSchema), authenticate, checkRole(["author", "admin"]), createPost);
 postRouter.get("/all", getAllPosts);
+postRouter.get("/category/:id", getPostsByCategoryId);
 postRouter.get("/:id", idValidate(idSchema), getPostById);
-postRouter.patch("/:id", idValidate(idSchema), updatePostValidate(updatePostSchema), authenticate, chekAuthorRole, chekAdminRole, updatePost);
-postRouter.delete("/:id", idValidate(idSchema), authenticate, chekAuthorRole, chekAdminRole, deletePost);
+postRouter.patch("/:id", idValidate(idSchema), updatePostValidate(updatePostSchema), authenticate, checkRole(["author", "admin"]), updatePost);
+postRouter.delete("/:id", idValidate(idSchema), authenticate, checkRole(["author", "admin"]), deletePost);
 
 export default postRouter;

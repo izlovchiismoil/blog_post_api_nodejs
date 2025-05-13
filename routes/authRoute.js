@@ -2,11 +2,11 @@ import { Router } from "express";
 const authRouter = Router();
 
 import { loginUser, logoutUser, refreshToken } from "../controllers/authController.js";
-import { authenticate, chekAdminRole, chekAuthorRole } from "../middlewares/authMiddleware.js";
+import { authenticate, checkRole } from "../middlewares/authMiddleware.js";
 
 authRouter.post("/login", loginUser);
-authRouter.post("/logout", authenticate, chekAuthorRole, chekAdminRole, logoutUser);
-authRouter.post("/refresh", authenticate, chekAuthorRole, chekAdminRole, refreshToken);
+authRouter.post("/logout", authenticate, checkRole(["author","admin"]), logoutUser);
+authRouter.post("/refresh", authenticate, checkRole(["author","admin"]), refreshToken);
 
 export default authRouter;
 

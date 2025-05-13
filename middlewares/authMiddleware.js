@@ -1,4 +1,5 @@
 import { decodeToken } from "../utils/tokenGenerate.js";
+import models from "../models/indexModel.js";
 
 export async function authenticate (req, res, next) {
     const authHeader = req.headers.authorization;
@@ -8,8 +9,16 @@ export async function authenticate (req, res, next) {
     const accessToken = authHeader.split(" ")[1];
     try {
         let [decodedAccessToken] = await Promise.all([decodeToken(accessToken)]);
-        req.user = decodedAccessToken;
-        next();
+        if (decodedAccessToken) {
+            const user = await models.user.findByPk(decodedAccessToken.userId, { raw: true});
+            if (!user) {
+                return res.status(401).json({
+                    error: "User not found"
+                });
+            }
+            req.user = user;
+            next();
+        }
     }
     catch (err) {
         console.log(err);
@@ -24,20 +33,8 @@ export async function authenticate (req, res, next) {
 
 export async function chekAdminRole (req, res, next) {
     try {
-        const requestTokenData = req.headers.authorization;
-        if (!requestTokenData) {
-            return res.status(401).json({
-                error: "Token is required"
-            });
-        }
-        const accessToken = requestTokenData.split(" ")[1];
-        const decodedAccessToken = await decodeToken(accessToken);
-        if (!decodedAccessToken) {
-            return res.status(401).json({
-                error: "Token invalid"
-            });
-        }
-        if (decodedAccessToken.userRole === "admin") {
+        const user = req.user;
+        if (user.userRole === "admin") {
             next();
         }
         else {
@@ -55,20 +52,8 @@ export async function chekAdminRole (req, res, next) {
 
 export async function chekAuthorRole (req, res, next) {
     try {
-        const requestTokenData = req.headers.authorization;
-        if (!requestTokenData) {
-            return res.status(401).json({
-                error: "Token is required"
-            });
-        }
-        const accessToken = requestTokenData.split(" ")[1];
-        const decodedAccessToken = await decodeToken(accessToken);
-        if (!decodedAccessToken) {
-            return res.status(401).json({
-                error: "Token invalid"
-            });
-        }
-        if (decodedAccessToken.userRole === "author" || decodedAccessToken.userRole === "admin") {
+        const user = req.user;
+        if (user.userRole === "author" || user.userRole === "admin") {
             next();
         }
         else {
@@ -76,7 +61,6 @@ export async function chekAuthorRole (req, res, next) {
                 error: "Access denied"
             });
         }
-
     }
     catch (err) {
         return res.status(401).json({
@@ -84,3 +68,16 @@ export async function chekAuthorRole (req, res, next) {
         });
     }
 }
+
+export function checkRole(allowedRoles) {
+    return function (req, res, next) {
+        const userRole = req.user?.role;
+
+        if (!userRole || !allowedRoles.includes(userRole)) {
+            return res.status(403).json({ error: 'Access denied. You do not have permission.' });
+        }
+
+        next();
+    };
+}
+

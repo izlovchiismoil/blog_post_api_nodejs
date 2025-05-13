@@ -19,14 +19,13 @@ import {
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {
     authenticate,
-    chekAdminRole,
-    chekAuthorRole
+    checkRole,
 } from "../middlewares/authMiddleware.js";
 
-userRouter.post("/create", createUserValidate(createUserSchema), authenticate, chekAdminRole, createUser);
-userRouter.get("/all", authenticate, chekAdminRole, getAllUsers);
-userRouter.get("/:id", idValidate(idSchema), authenticate, chekAuthorRole, chekAdminRole, getUserById);
-userRouter.patch("/:id", idValidate(idSchema), updateUserValidate(updateUserSchema), authenticate, chekAuthorRole, chekAdminRole, updateUser);
-userRouter.delete("/:id", idValidate(idSchema), authenticate, chekAdminRole, deleteUser);
+userRouter.post("/create", createUserValidate(createUserSchema), authenticate, checkRole(["admin"]), createUser);
+userRouter.get("/all", authenticate, checkRole(["admin"]), getAllUsers);
+userRouter.get("/:id", idValidate(idSchema), authenticate, checkRole(["author", "admin"]), getUserById);
+userRouter.patch("/:id", idValidate(idSchema), updateUserValidate(updateUserSchema), authenticate, checkRole(["author","admin"]), updateUser);
+userRouter.delete("/:id", idValidate(idSchema), authenticate, checkRole(["admin"]), deleteUser);
 
 export default userRouter;

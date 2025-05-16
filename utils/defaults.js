@@ -7,7 +7,7 @@ const defaultUser = {
     username: process.env.SUPER_USERNAME || "admin",
     password: process.env.SUPER_PASSWORD || "admin",
     imageUrl: null,
-    role: "admin"
+    userRole: "admin"
 };
 
 export async function defaults () {

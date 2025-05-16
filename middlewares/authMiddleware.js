@@ -31,47 +31,9 @@ export async function authenticate (req, res, next) {
     }
 }
 
-export async function chekAdminRole (req, res, next) {
-    try {
-        const user = req.user;
-        if (user.userRole === "admin") {
-            next();
-        }
-        else {
-            return res.status(403).json({
-                error: "Access denied"
-            });
-        }
-    }
-    catch (err) {
-        return res.status(401).json({
-            error: err.message
-        });
-    }
-}
-
-export async function chekAuthorRole (req, res, next) {
-    try {
-        const user = req.user;
-        if (user.userRole === "author" || user.userRole === "admin") {
-            next();
-        }
-        else {
-            return res.status(403).json({
-                error: "Access denied"
-            });
-        }
-    }
-    catch (err) {
-        return res.status(401).json({
-            error: err.message
-        });
-    }
-}
-
 export function checkRole(allowedRoles) {
     return function (req, res, next) {
-        const userRole = req.user?.role;
+        const userRole = req.user?.userRole;
 
         if (!userRole || !allowedRoles.includes(userRole)) {
             return res.status(403).json({ error: 'Access denied. You do not have permission.' });

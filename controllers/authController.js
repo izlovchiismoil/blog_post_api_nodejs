@@ -29,8 +29,8 @@ export async function loginUser(req, res) {
                 error: 'Invalid credentials'
             });
         }
-        const accessToken = generateAccessToken({ userId: user.id, userRole: user.role });
-        const refreshToken = await generateRefreshToken({ userId: user.id, userRole: user.role });
+        const accessToken = generateAccessToken({ userId: user.id, userRole: user.userRole });
+        const refreshToken = await generateRefreshToken({ userId: user.id, userRole: user.userRole });
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,

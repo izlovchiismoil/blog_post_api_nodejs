@@ -22,12 +22,12 @@ export async function createUser (req, res) {
             });
         }
         requestUserData.password = await bcryptjs.hash(requestUserData.password, 10);
-        requestUserData.role = requestUserData.role.toLowerCase();
+        requestUserData.userRole = requestUserData.userRole.toLowerCase();
         const newUser = await models.user.create(requestUserData);
         const createdUser = newUser.toJSON();
         delete createdUser.username;
         delete createdUser.password;
-        delete createdUser.role;
+        delete createdUser.userRole;
         return res.status(201).json({
             createdUser
         });
@@ -112,7 +112,6 @@ export async function updateUser (req, res) {
                });
             }
             requestUserData.password = await bcryptjs.hash(requestUserData.newPassword, 10);
-            delete requestUserData.newPassword;
         }
         await models.user.update(
             { ...requestUserData },
@@ -139,7 +138,7 @@ export async function deleteUser (req, res) {
     try {
         const requestUserId = req.params.id;
         const user = await models.user.findByPk(requestUserId, {
-            attributes: { exclude: ['username', 'password', 'role'] },
+            attributes: { exclude: ['password'] },
             raw: true
         });
         if (!user) {

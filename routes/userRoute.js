@@ -22,10 +22,10 @@ import {
     checkRole,
 } from "../middlewares/authMiddleware.js";
 
-userRouter.post("/create", createUserValidate(createUserSchema), authenticate, checkRole(["admin"]), createUser);
+userRouter.post("/create", authenticate, createUserValidate(createUserSchema), checkRole(["admin"]), createUser);
 userRouter.get("/all", authenticate, checkRole(["admin"]), getAllUsers);
-userRouter.get("/:id", idValidate(idSchema), authenticate, checkRole(["author", "admin"]), getUserById);
-userRouter.patch("/:id", idValidate(idSchema), updateUserValidate(updateUserSchema), authenticate, checkRole(["author","admin"]), updateUser);
-userRouter.delete("/:id", idValidate(idSchema), authenticate, checkRole(["admin"]), deleteUser);
+userRouter.get("/:id", authenticate, idValidate(idSchema), checkRole(["author", "admin"]), getUserById);
+userRouter.patch("/:id", authenticate, idValidate(idSchema), updateUserValidate(updateUserSchema), checkRole(["author","admin"]), updateUser);
+userRouter.delete("/:id", authenticate, idValidate(idSchema), checkRole(["admin"]), deleteUser);
 
 export default userRouter;

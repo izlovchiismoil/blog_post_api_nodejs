@@ -108,10 +108,11 @@ export async function updateUser (req, res) {
             const isMatch = await bcryptjs.compare(requestUserData.oldPassword, user.password);
             if (!isMatch) {
                return res.status(400).json({
-                   error: "Doesn't match password"
+                   error: "Doesn't match old password"
                });
             }
-            requestUserData.newPassword = await bcryptjs.hash(requestUserData.newPassword, 10);
+            requestUserData.password = await bcryptjs.hash(requestUserData.newPassword, 10);
+            delete requestUserData.newPassword;
         }
         await models.user.update(
             { ...requestUserData },

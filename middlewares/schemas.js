@@ -19,7 +19,8 @@ export const updateUserSchema = Joi.object({
     lastName: Joi.string().optional(),
     role: Joi.string().optional(),
     username: Joi.string().pattern(/^[a-zA-Z]+([0-9]+|[a-zA-Z]+)$/).optional(),
-    password: Joi.string().min(6).max(30).optional(),
+    oldPassword: Joi.string().optional().min(6).max(30),
+    newPassword: Joi.string().optional().min(6).max(30),
     imageUrl: Joi.string().optional()
 }).min(1);
 

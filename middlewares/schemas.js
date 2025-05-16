@@ -15,13 +15,13 @@ export const createUserSchema = Joi.object({
     imageUrl: Joi.string().optional()
 });
 export const updateUserSchema = Joi.object({
-    firstName: Joi.string(),
+    firstName: Joi.string().optional(),
     lastName: Joi.string().optional(),
     role: Joi.string().optional(),
     username: Joi.string().pattern(/^[a-zA-Z]+([0-9]+|[a-zA-Z]+)$/).optional(),
     password: Joi.string().min(6).max(30).optional(),
     imageUrl: Joi.string().optional()
-});
+}).min(1);
 
 // Posts schemas
 export const createPostSchema = Joi.object({

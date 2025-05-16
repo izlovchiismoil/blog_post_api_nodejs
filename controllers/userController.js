@@ -92,6 +92,7 @@ export async function updateUser (req, res) {
     try {
         const requestUserId = req.params.id;
         const requestUserData = req.body.user;
+        console.log("Request Data: ", requestUserData);
         if (!requestUserId || !requestUserData) {
             return res.status(400).json({
                 error: "User params not found"
@@ -103,12 +104,15 @@ export async function updateUser (req, res) {
                 error: "User not found"
             });
         }
-        if (user.username === "admin") {
-            return res.status(403).json({
-                error: "You do not have permission to change this user!"
-            });
+        if (requestUserData.newPassword && requestUserData.oldPassword) {
+            const isMatch = await bcryptjs.compare(requestUserData.oldPassword, user.password);
+            if (!isMatch) {
+               return res.status(400).json({
+                   error: "Doesn't match password"
+               });
+            }
+            requestUserData.newPassword = await bcryptjs.hash(requestUserData.newPassword, 10);
         }
-        requestUserData.password = await bcryptjs.hash(requestUserData.password, 10);
         await models.user.update(
             { ...requestUserData },
             {
@@ -118,7 +122,7 @@ export async function updateUser (req, res) {
             }
         );
         const updatedUser = await models.user.findByPk(requestUserId, {
-            attributes: { exclude: ['username', 'password', 'role'] },
+            attributes: { exclude: ['password'] },
             raw: true
         });
 

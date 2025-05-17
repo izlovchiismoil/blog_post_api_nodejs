@@ -25,9 +25,7 @@ export async function createUser (req, res) {
         requestUserData.userRole = requestUserData.userRole.toLowerCase();
         const newUser = await models.user.create(requestUserData);
         const createdUser = newUser.toJSON();
-        delete createdUser.username;
         delete createdUser.password;
-        delete createdUser.userRole;
         return res.status(201).json({
             createdUser
         });

@@ -10,17 +10,17 @@ export const createUserSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     userRole: Joi.string().required(),
-    username: Joi.string().pattern(/^[a-zA-Z]+([0-9]+|[a-zA-Z]+)$/).required(),
-    password: Joi.string().min(6).max(30).required(),
+    username: Joi.string().min(2).required(),
+    password: Joi.string().min(4).max(30).required(),
     imageUrl: Joi.string().optional()
 });
 export const updateUserSchema = Joi.object({
     firstName: Joi.string().optional(),
     lastName: Joi.string().optional(),
     userRole: Joi.string().optional(),
-    username: Joi.string().optional().min(6).max(30),
-    oldPassword: Joi.string().optional().min(6).max(30),
-    newPassword: Joi.string().optional().min(6).max(30),
+    username: Joi.string().optional().min(2).max(30),
+    oldPassword: Joi.string().optional().min(4).max(30),
+    newPassword: Joi.string().optional().min(4).max(30),
     imageUrl: Joi.string().optional()
 }).min(1);
 

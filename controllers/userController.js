@@ -1,9 +1,10 @@
 import models from "../models/indexModel.js";
 import bcryptjs from "bcryptjs";
 
+
 export async function createUser (req, res) {
     try {
-        const requestUserData = req.body.user;
+        const requestUserData = req.body;
         if (!requestUserData) {
             return res.status(400).json({
                 error: "User params not found"
@@ -19,6 +20,11 @@ export async function createUser (req, res) {
         if (user) {
             return res.status(409).send({
                 error: "User already exists"
+            });
+        }
+        if (requestUserData.password !== requestUserData.reEnterPassword) {
+            return res.status(400).json({
+                error: "Passwords do not match"
             });
         }
         requestUserData.password = await bcryptjs.hash(requestUserData.password, 10);
@@ -89,8 +95,8 @@ export async function getAllUsers (req, res) {
 export async function updateUser (req, res) {
     try {
         const requestUserId = req.params.id;
-        const requestUserData = req.body.user;
-        console.log("Request Data: ", requestUserData);
+        const requestUserData = req.body;
+        console.log(requestUserData);
         if (!requestUserId || !requestUserData) {
             return res.status(400).json({
                 error: "User params not found"
@@ -110,6 +116,9 @@ export async function updateUser (req, res) {
                });
             }
             requestUserData.password = await bcryptjs.hash(requestUserData.newPassword, 10);
+        }
+        if (!requestUserData.profileImage) {
+            requestUserData.profileImage = "user.png";
         }
         await models.user.update(
             { ...requestUserData },

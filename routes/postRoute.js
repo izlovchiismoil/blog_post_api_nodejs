@@ -23,11 +23,11 @@ import {
     checkRole,
 } from "../middlewares/authMiddleware.js";
 
-postRouter.post("/create", authenticate, createPostValidate(createPostSchema), checkRole(["author", "admin"]), createPost);
+postRouter.post("/create", authenticate, checkRole(["author", "admin"]), createPostValidate(createPostSchema), createPost);
 postRouter.get("/all", getAllPosts);
 postRouter.get("/category/:id", getPostsByCategoryId);
 postRouter.get("/:id", idValidate(idSchema), getPostById);
-postRouter.patch("/:id", authenticate, idValidate(idSchema), updatePostValidate(updatePostSchema), checkRole(["author", "admin"]), updatePost);
-postRouter.delete("/:id", authenticate, idValidate(idSchema), checkRole(["author", "admin"]), deletePost);
+postRouter.patch("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), updatePostValidate(updatePostSchema), updatePost);
+postRouter.delete("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), deletePost);
 
 export default postRouter;

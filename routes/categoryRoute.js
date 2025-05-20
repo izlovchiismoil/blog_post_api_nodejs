@@ -19,10 +19,10 @@ import {
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import { authenticate, checkRole } from "../middlewares/authMiddleware.js";
 
-categoryRouter.post("/create", createCategoryValidate(createCategorySchema), authenticate, checkRole(["admin"]), createCategory);
+categoryRouter.post("/create", authenticate, checkRole(["admin"]), createCategoryValidate(createCategorySchema), createCategory);
 categoryRouter.get("/all", getAllCategories);
 categoryRouter.get("/:id", idValidate(idSchema), getCategoryById);
-categoryRouter.patch("/:id", idValidate(idSchema) ,updateCategoryValidate(updateCategorySchema), authenticate, checkRole(["admin"]), updateCategory);
-categoryRouter.delete("/:id", idValidate(idSchema), authenticate, checkRole(["admin"]),  deleteCategory);
+categoryRouter.patch("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema) ,updateCategoryValidate(updateCategorySchema), updateCategory);
+categoryRouter.delete("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema), deleteCategory);
 
 export default categoryRouter;

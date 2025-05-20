@@ -23,8 +23,8 @@ const User = sequelize.define('users', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    imageUrl: {
-        type: DataTypes.STRING,
+    profileImage: {
+        type: DataTypes.TEXT,
         allowNull: true
     },
     userRole: {

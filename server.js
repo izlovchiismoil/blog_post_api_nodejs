@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import path from "path";
 import cookieParser from 'cookie-parser';
 dotenv.config();
 const app = express();
@@ -15,6 +16,10 @@ import categoryRouter from "./routes/categoryRoute.js";
 import commentRouter from "./routes/commentRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { defaults } from "./utils/defaults.js";
+
+app.use("/profile-image", express.static(path.join(process.cwd(), "uploads")));
+
+
 app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,

@@ -12,7 +12,8 @@ export const createUserSchema = Joi.object({
     userRole: Joi.string().required(),
     username: Joi.string().min(2).required(),
     password: Joi.string().min(4).max(30).required(),
-    imageUrl: Joi.string().optional()
+    reEnterPassword: Joi.string().min(4).max(30).required(),
+    profileImage: Joi.string().optional()
 });
 export const updateUserSchema = Joi.object({
     firstName: Joi.string().optional(),
@@ -21,7 +22,7 @@ export const updateUserSchema = Joi.object({
     username: Joi.string().optional().min(2).max(30),
     oldPassword: Joi.string().optional().min(4).max(30),
     newPassword: Joi.string().optional().min(4).max(30),
-    imageUrl: Joi.string().optional()
+    profileImage: Joi.string().optional()
 }).min(1);
 
 // Posts schemas

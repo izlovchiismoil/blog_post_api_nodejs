@@ -32,7 +32,7 @@ export const createPostSchema = Joi.object({
     content: Joi.string().required(),
     authorId: Joi.number().required(),
     categoryId: Joi.number().required(),
-    imageUrl: Joi.string().uri().required()
+    postImage: Joi.string().optional()
 });
 export const updatePostSchema = Joi.object({
     title: Joi.string().optional(),
@@ -40,7 +40,7 @@ export const updatePostSchema = Joi.object({
     content: Joi.string().optional(),
     authorId: Joi.number().required(),
     categoryId: Joi.number().optional(),
-    imageUrl: Joi.string().uri().optional()
+    postImage: Joi.string().optional()
 });
 
 // Categories schemas
@@ -48,8 +48,8 @@ export const createCategorySchema = Joi.object({
     title: Joi.string().required()
 });
 export const updateCategorySchema = Joi.object({
-    title: Joi.string().required()
-});
+    title: Joi.string().optional()
+}).min(1);
 
 // Comments schemas
 export const createCommentSchema = Joi.object({

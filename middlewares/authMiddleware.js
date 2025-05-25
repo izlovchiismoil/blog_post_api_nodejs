@@ -34,11 +34,9 @@ export async function authenticate (req, res, next) {
 export function checkRole(allowedRoles) {
     return function (req, res, next) {
         const userRole = req.user?.userRole;
-
         if (!userRole || !allowedRoles.includes(userRole)) {
             return res.status(403).json({ error: 'Access denied. You do not have permission.' });
         }
-
         next();
     };
 }

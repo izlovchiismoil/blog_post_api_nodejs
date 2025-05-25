@@ -21,12 +21,12 @@ import {
     authenticate,
     checkRole,
 } from "../middlewares/authMiddleware.js";
-import {upload} from "../middlewares/uploadMiddleware.js";
+import { uploadProfile } from "../middlewares/uploadMiddleware.js";
 
-userRouter.post("/create", authenticate, checkRole(["admin"]), upload.single("profileImage"), createUserValidate(createUserSchema), createUser);
+userRouter.post("/create", authenticate, checkRole(["admin"]), uploadProfile.single("profileImage"), createUserValidate(createUserSchema), createUser);
 userRouter.get("/all", authenticate, checkRole(["admin"]), getAllUsers);
 userRouter.get("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), getUserById);
-userRouter.patch("/:id", authenticate, checkRole(["author","admin"]), upload.single("profileImage"), updateUser);
+userRouter.patch("/:id", authenticate, checkRole(["author","admin"]), uploadProfile.single("profileImage"), updateUser);
 userRouter.delete("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema), deleteUser);
 
 export default userRouter;

@@ -10,10 +10,10 @@ export function decodeToken(token) {
         jwt.verify(token, process.env.JWT_SECRET, {},(err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
-                    reject("TOKEN_EXPIRED");
+                    reject(new Error("TOKEN_EXPIRED"));
                 }
                 else {
-                    reject("TOKEN_INVALID");
+                    reject(new Error("TOKEN_INVALID"));
                 }
             } else {
                 resolve(decoded);

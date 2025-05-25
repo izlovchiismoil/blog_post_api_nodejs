@@ -18,12 +18,12 @@ export async function createUser (req, res) {
             }
         });
         if (user) {
-            return res.status(409).send({
+            return res.status(409).json({
                 error: "User already exists"
             });
         }
         if (requestUserData.password !== requestUserData.reEnterPassword) {
-            return res.status(400).json({
+            return res.status(401).json({
                 error: "Passwords do not match"
             });
         }
@@ -56,7 +56,7 @@ export async function getUserById (req, res) {
             raw: true
         });
         if (!user) {
-            return res.status(404).send({
+            return res.status(404).json({
                 error: "User not found"
             });
         }
@@ -77,7 +77,7 @@ export async function getAllUsers (req, res) {
             attributes: { exclude: ['password'], raw: true },
         });
         if (!users || users.length === 0) {
-            return res.status(404).send({
+            return res.status(404).json({
                 error: "Users not found"
             });
         }
@@ -104,21 +104,21 @@ export async function updateUser (req, res) {
         }
         const user = await models.user.findByPk(requestUserId, { raw: true });
         if (!user) {
-            return res.status(404).send({
+            return res.status(404).json({
                 error: "User not found"
             });
         }
         if (requestUserData.newPassword && requestUserData.oldPassword) {
             const isMatch = await bcryptjs.compare(requestUserData.oldPassword, user.password);
             if (!isMatch) {
-               return res.status(400).json({
+               return res.status(401).json({
                    error: "Doesn't match old password"
                });
             }
             requestUserData.password = await bcryptjs.hash(requestUserData.newPassword, 10);
         }
         if (!requestUserData.profileImage) {
-            requestUserData.profileImage = "user.png";
+            requestUserData.profileImage = "no-image.png";
         }
         await models.user.update(
             { ...requestUserData },
@@ -139,6 +139,9 @@ export async function updateUser (req, res) {
     }
     catch (err) {
         console.log(err);
+        return res.status(500).json({
+            error: err.message
+        });
     }
 }
 export async function deleteUser (req, res) {
@@ -149,7 +152,7 @@ export async function deleteUser (req, res) {
             raw: true
         });
         if (!user) {
-            return res.status(404).send({
+            return res.status(404).json({
                 error: "User not found"
             });
         }

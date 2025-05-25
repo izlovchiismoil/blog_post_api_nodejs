@@ -4,7 +4,7 @@ export async function createCategory(req, res) {
     try {
         const requestCategoryData = req.body.category;
         if (!requestCategoryData) {
-            return res.status(400).send({
+            return res.status(400).json({
                 error: "Category params not found",
             });
         }
@@ -16,7 +16,7 @@ export async function createCategory(req, res) {
         });
         if (category) {
             return res.status(409).json({
-                error: 'Category already exists'
+                error: "Category already exists"
             });
         }
         const createdCategory = await models.category.create({
@@ -28,6 +28,9 @@ export async function createCategory(req, res) {
     }
     catch (err) {
         console.log(err);
+        return res.status(500).json({
+            error: err.message
+        });
     }
 }
 export async function getAllCategories(req, res) {
@@ -35,7 +38,7 @@ export async function getAllCategories(req, res) {
         const categories = await models.category.findAll({ raw: true });
         if (!categories || categories.length === 0) {
             return res.status(404).json({
-                error: 'Category not found'
+                error: "Category not found"
             });
         }
         return res.status(200).json({
@@ -45,7 +48,7 @@ export async function getAllCategories(req, res) {
     catch (err) {
         console.log(err);
         return res.status(500).json({
-            error: 'Something went wrong'
+            error: err.message
         });
     }
 }
@@ -55,7 +58,7 @@ export async function getCategoryById(req, res) {
         const category = await models.category.findByPk(requestCategoryId, { raw: true });
         if (!category) {
             return res.status(404).json({
-                error: 'Category not found'
+                error: "Category not found"
             });
         }
         return res.status(200).json({
@@ -65,7 +68,7 @@ export async function getCategoryById(req, res) {
     catch (err) {
         console.log(err);
         return res.status(500).json({
-            error: 'Something went wrong'
+            error: err.message
         });
     }
 }
@@ -73,10 +76,10 @@ export async function updateCategory(req, res) {
     try {
         const requestCategoryId = req.params.id;
         const requestCategoryData = req.body.category;
-        const category = await models.category.findByPk(requestCategoryId, { raw: true });
+            const category = await models.category.findByPk(requestCategoryId, { raw: true });
         if (!category) {
             return res.status(404).json({
-                error: 'Category not found'
+                error: "Category not found"
             });
         }
         await models.category.update(
@@ -93,7 +96,7 @@ export async function updateCategory(req, res) {
     catch (err) {
         console.log(err);
         return res.status(500).json({
-            error: 'Something went wrong'
+            error: err.message
         });
     }
 }
@@ -103,7 +106,7 @@ export async function deleteCategory(req, res) {
         const category = await models.category.findByPk(requestCategoryId);
         if (!category) {
             return res.status(404).json({
-                error: 'Category not found'
+                error: "Category not found"
             });
         }
         await models.category.destroy({
@@ -117,5 +120,8 @@ export async function deleteCategory(req, res) {
     }
     catch (err) {
         console.log(err);
+        return res.status(500).json({
+            error: err.message
+        });
     }
 }

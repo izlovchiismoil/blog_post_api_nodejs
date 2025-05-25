@@ -5,7 +5,7 @@ export async function createComment (req, res) {
         const requestCommentData = req.body.comment;
         const post = await models.post.findByPk(requestCommentData.postId);
         if (!post) {
-            return res.status(400).json({
+            return res.status(404).json({
                 error: "Post not found"
             });
         }

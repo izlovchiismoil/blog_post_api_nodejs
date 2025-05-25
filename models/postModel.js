@@ -37,7 +37,7 @@ const Post = sequelize.define("posts", {
             key: 'id'
         }
     },
-    imageUrl: {
+    postImage: {
         type: DataTypes.TEXT,
         allowNull: true
     }

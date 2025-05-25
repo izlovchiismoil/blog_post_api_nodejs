@@ -10,7 +10,7 @@ export async function loginUser(req, res) {
     try {
         const requestUserData = req.body.user;
         if (!requestUserData) {
-            return res.status(401).json({
+            return res.status(400).json({
                 error: "Params of User not found"
             });
         }
@@ -20,13 +20,13 @@ export async function loginUser(req, res) {
         });
         if (!user) {
             return res.status(404).json({
-                error: 'User not found'
+                error: "User not found"
             });
         }
         const isMatch = await bcryptjs.compare(requestUserData.password, user.password);
         if (!isMatch) {
-            return res.status(400).json({
-                error: 'Invalid credentials'
+            return res.status(401).json({
+                error: "Invalid credentials"
             });
         }
         const accessToken = generateAccessToken({ userId: user.id, userRole: user.userRole });
@@ -36,7 +36,7 @@ export async function loginUser(req, res) {
             secure: false,
             sameSite: 'Strict',
             maxAge: 7 * 24 * 60 * 60 * 1000,
-            path: "/auth"
+            path: "/"
         });
         return res.status(200).json({
             accessToken
@@ -44,7 +44,7 @@ export async function loginUser(req, res) {
 
     } catch (err) {
         console.log(err);
-        return res.status(500).send({
+        return res.status(500).json({
             error: err.message
         });
     }
@@ -56,7 +56,7 @@ export async function logoutUser(req, res) {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
-            path: "/auth"
+            path: "/"
         });
         return res.status(200).json({
             message: "Logged out successfully"
@@ -64,7 +64,7 @@ export async function logoutUser(req, res) {
     }
     catch (err) {
         console.log(err);
-        return res.status(500).send({
+        return res.status(500).json({
             error: err.message
         });
     }
@@ -87,11 +87,6 @@ export async function refreshToken(req, res) {
 
     } catch (err) {
         console.log(err);
-        if (err === "REFRESH_TOKEN_EXPIRED") {
-            return res.status(401).json({ error: "Refresh token expired" });
-        } else if (err === "REFRESH_TOKEN_INVALID") {
-            return res.status(403).json({ error: "Refresh token invalid" });
-        }
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: err.message });
     }
 }

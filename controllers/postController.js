@@ -53,7 +53,15 @@ export async function updatePost (req, res) {
                 where: { id: requestPostId }
             }
             );
-        const updatedPost = await models.post.findByPk(requestPostId);
+        const updatedPost = await models.post.findByPk(requestPostId,{
+            include: [
+                {
+                    model: User,
+                    key: "id",
+                    attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
+                }
+            ]
+        });
         return res.status(201).json({
             updatedPost
         });
@@ -128,11 +136,13 @@ export async function getPostById (req, res) {
             include: [
                 {
                     model: User,
-                    key: "id"
+                    key: "id",
+                    attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
                 },
                 {
                     model: Category,
-                    key: "id"
+                    key: "id",
+                    attributes: { exclude: ["createdAt", "updatedAt"] }
                 }
             ],
             raw: true,
@@ -167,7 +177,7 @@ export async function getPostsByAuthorId (req, res) {
             include: [
                 {
                     model: User,
-                    key: "id"
+                    key: "id",
                 },
                 {
                     model: Category,
@@ -202,11 +212,12 @@ export async function getPostsByCategoryId (req, res) {
                 {
                     model: User,
                     key: "id",
-                    attributes: { exclude: ["password"] }
+                    attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
                 },
                 {
                     model: Category,
-                    key: "id"
+                    key: "id",
+                    attributes: {exclude: ["createdAt", "updatedAt"] }
                 }
             ],
             raw: true,
@@ -255,7 +266,8 @@ export async function getPostsOfCategoryOfUser (req, res) {
                 },
                 {
                     model: Category,
-                    key: "id"
+                    key: "id",
+                    attributes: {exclude: ["createdAt", "updatedAt"] }
                 }
             ],
             raw: true,
@@ -268,6 +280,35 @@ export async function getPostsOfCategoryOfUser (req, res) {
         }
         return res.status(200).json({
             posts
+        });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: err.message
+        });
+    }
+}
+export async function getPostsByPagination (req, res) {
+    try {
+        const currentPage = parseInt(req.query.currentPage) || 1;
+        const limit = parseInt(req.query.limit) || 4;
+        const offset = (currentPage - 1) * limit;
+        const { count, rows } = await models.post.findAndCountAll({
+            limit,
+            offset,
+            order: [['createdAt', 'DESC']]
+        });
+        if ((!count && !rows) || count === 0) {
+            return res.status(404).json({
+                error: "Posts not found"
+            });
+        }
+        return res.status(200).json({
+            totalItems: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage,
+            posts: rows
         });
     }
     catch (err) {

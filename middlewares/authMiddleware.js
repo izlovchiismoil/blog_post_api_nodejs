@@ -9,24 +9,20 @@ export async function authenticate (req, res, next) {
     const accessToken = authHeader.split(" ")[1];
     try {
         let [decodedAccessToken] = await Promise.all([decodeToken(accessToken)]);
-        if (decodedAccessToken) {
-            const user = await models.user.findByPk(decodedAccessToken.userId, { raw: true});
-            if (!user) {
-                return res.status(401).json({
-                    error: "User not found"
-                });
-            }
-            req.user = user;
-            next();
+
+        if (decodedAccessToken.name === "TokenExpiredError") {
+            return res.status(401).json({ error: "Salom token eskirdi" });
         }
+        const user = await models.user.findByPk(decodedAccessToken.userId, { raw: true});
+        if (!user) {
+            return res.status(404).json({
+                error: "User not found"
+            });
+        }
+        req.user = user;
+        next();
     }
     catch (err) {
-        console.log(err);
-        if (err === "TOKEN_EXPIRED") {
-            return res.status(401).json({ error: "Access token expired" });
-        } else if (err === "TOKEN_INVALID") {
-            return res.status(403).json({ error: "Access token invalid" });
-        }
         return res.status(500).json({ error: "Internal server error" });
     }
 }

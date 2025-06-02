@@ -8,7 +8,8 @@ import {
     updatePost,
     getPostsByCategoryId,
     getPostsByAuthorId,
-    getPostsOfCategoryOfUser
+    getPostsOfCategoryOfUser,
+    getPostsByPagination
 } from "../controllers/postController.js";
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {
@@ -28,6 +29,7 @@ import {uploadPost} from "../middlewares/uploadMiddleware.js";
 
 postRouter.post("/create", authenticate, checkRole(["author", "admin"]), uploadPost.single("postImage"), createPostValidate(createPostSchema), createPost);
 postRouter.get("/all", getAllPosts);
+postRouter.get("/", getPostsByPagination);
 postRouter.get("/author/:id", idValidate(idSchema), getPostsByAuthorId);
 postRouter.get("/category/:id", getPostsByCategoryId);
 postRouter.get("/users/:id/posts", authenticate, idValidate(idSchema), getPostsOfCategoryOfUser);

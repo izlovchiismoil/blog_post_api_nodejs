@@ -1,9 +1,10 @@
 import express, {urlencoded} from "express";
 import dotenv from "dotenv";
-import helmet from "helmet";
+import helmet, {crossOriginOpenerPolicy} from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
@@ -17,21 +18,24 @@ import commentRouter from "./routes/commentRoute.js";
 import authRouter from "./routes/authRoute.js";
 import { defaults } from "./utils/defaults.js";
 
-app.use("/images", express.static(path.join(process.cwd(), "uploads")));
 
-app.use(cors({
-    origin: "http://localhost:5173",
-    include: true,
-}));
 app.use(cookieParser());
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10000,
     message: "Too many requests from this IP. Please try again later."
 });
+
 app.use(limiter);
+
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
+
 
 models.user.sync({ alter: true }).then(user => {
     console.log(user);
@@ -54,7 +58,11 @@ defaults().then(d => {
     console.log("All defaults set");
 }).catch(err => console.log(err));
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 // Routers
+app.use("/api/v1/images/posts", express.static(path.join(__dirname, "uploads/posts")));
+app.use("/api/v1/images/profile", express.static(path.join(__dirname, "uploads/profile")));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);

@@ -34,7 +34,7 @@ export async function loginUser(req, res) {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: 'Strict',
+            sameSite: "Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/"
         });
@@ -72,6 +72,7 @@ export async function logoutUser(req, res) {
 
 export async function refreshToken(req, res) {
 
+    console.log("Kukidagi refresh: ",req.cookies);
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {

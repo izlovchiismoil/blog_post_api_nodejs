@@ -6,7 +6,7 @@ import { authenticate, checkRole } from "../middlewares/authMiddleware.js";
 
 authRouter.post("/login", loginUser);
 authRouter.post("/logout", authenticate, checkRole(["author","admin"]), logoutUser);
-authRouter.post("/refresh", authenticate, checkRole(["author","admin"]), refreshToken);
+authRouter.post("/refresh", refreshToken);
 
 export default authRouter;
 

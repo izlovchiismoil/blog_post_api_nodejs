@@ -1,12 +1,12 @@
-import express, {urlencoded} from "express";
 import dotenv from "dotenv";
-import helmet, {crossOriginOpenerPolicy} from "helmet";
+dotenv.config();
+import express, {urlencoded} from "express";
+import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
-dotenv.config();
 const app = express();
 app.use(urlencoded({ extended: false }));
 app.use(express.json());
@@ -36,6 +36,7 @@ app.use(cors({
     credentials: true
 }));
 
+models.userRole.sync({ alter: true });
 
 models.user.sync({ alter: true }).then(user => {
     console.log(user);

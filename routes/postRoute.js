@@ -23,18 +23,19 @@ import {
 } from "../middlewares/schemas.js";
 import {
     authenticate,
-    checkRole,
+    checkPermission,
 } from "../middlewares/authMiddleware.js";
 import {uploadPost} from "../middlewares/uploadMiddleware.js";
 
-postRouter.post("/create", authenticate, checkRole(["author", "admin"]), uploadPost.single("postImage"), createPostValidate(createPostSchema), createPost);
+
+postRouter.post("/create", authenticate, checkPermission(["createPost"]), uploadPost.single("postImage"), createPostValidate(createPostSchema), createPost);
 postRouter.get("/all", getAllPosts);
 postRouter.get("/", getPostsByPagination);
 postRouter.get("/author/:id", idValidate(idSchema), getPostsByAuthorId);
 postRouter.get("/category/:id", getPostsByCategoryId);
 postRouter.get("/users/:id/posts", authenticate, idValidate(idSchema), getPostsOfCategoryOfUser);
 postRouter.get("/:id", idValidate(idSchema), getPostById);
-postRouter.patch("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), updatePostValidate(updatePostSchema), updatePost);
-postRouter.delete("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), deletePost);
+postRouter.patch("/:id", authenticate, checkPermission(["updateOwnPost", "updateAnyPost"]), idValidate(idSchema), updatePostValidate(updatePostSchema), updatePost);
+postRouter.delete("/:id", authenticate, checkPermission(["deleteOwnPost", "deleteAnyPost"]), idValidate(idSchema), deletePost);
 
 export default postRouter;

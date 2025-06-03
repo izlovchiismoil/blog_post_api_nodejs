@@ -1,6 +1,7 @@
-import sequelize from '../config/db.js';
-import  { DataTypes } from 'sequelize';
-const User = sequelize.define('users', {
+import sequelize from "../config/db.js";
+import  { DataTypes } from "sequelize";
+import UserRole from "./userRoleModel.js";
+const User = sequelize.define("users", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -27,9 +28,13 @@ const User = sequelize.define('users', {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    userRole: {
-        type: DataTypes.STRING,
+    userRoleId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: UserRole,
+            key: "id"
+        }
     }
 }, { timestamps: true, freezeTableName: true });
 

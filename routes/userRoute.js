@@ -19,14 +19,14 @@ import {
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {
     authenticate,
-    checkRole,
+    checkPermission,
 } from "../middlewares/authMiddleware.js";
 import { uploadProfile } from "../middlewares/uploadMiddleware.js";
 
-userRouter.post("/create", authenticate, checkRole(["admin"]), uploadProfile.single("profileImage"), createUserValidate(createUserSchema), createUser);
-userRouter.get("/all", authenticate, checkRole(["admin"]), getAllUsers);
-userRouter.get("/:id", authenticate, checkRole(["author", "admin"]), idValidate(idSchema), getUserById);
-userRouter.patch("/:id", authenticate, checkRole(["author","admin"]), uploadProfile.single("profileImage"), updateUser);
-userRouter.delete("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema), deleteUser);
+userRouter.post("/create", authenticate, checkPermission(["createUser"]), uploadProfile.single("profileImage"), createUserValidate(createUserSchema), createUser);
+userRouter.get("/all", authenticate, checkPermission(["viewAnyUser"]), getAllUsers);
+userRouter.get("/:id", authenticate, checkPermission(["viewUser"]), idValidate(idSchema), getUserById);
+userRouter.patch("/:id", authenticate, checkPermission(["updateUser"]), uploadProfile.single("profileImage"), updateUser);
+userRouter.delete("/:id", authenticate, checkPermission(["deleteAnyUser"]), idValidate(idSchema), deleteUser);
 
 export default userRouter;

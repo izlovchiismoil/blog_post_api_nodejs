@@ -11,7 +11,7 @@ export async function authenticate (req, res, next) {
         let [decodedAccessToken] = await Promise.all([decodeToken(accessToken)]);
 
         if (decodedAccessToken.name === "TokenExpiredError") {
-            return res.status(401).json({ error: "Salom token eskirdi" });
+            return res.status(401).json({ error: "Token expired" });
         }
         const user = await models.user.findByPk(decodedAccessToken.userId, { raw: true});
         if (!user) {
@@ -27,11 +27,24 @@ export async function authenticate (req, res, next) {
     }
 }
 
-export function checkRole(allowedRoles) {
-    return function (req, res, next) {
-        const userRole = req.user?.userRole;
-        if (!userRole || !allowedRoles.includes(userRole)) {
-            return res.status(403).json({ error: 'Access denied. You do not have permission.' });
+export function checkPermission (allowedPermissions) {
+    return async function (req, res, next) {
+        const userRoleId = req.user?.userRoleId;
+        if (!userRoleId) {
+            return res.status(401).json({
+                error: "Not authorized"
+            });
+        }
+        const userRole = await models.userRole.findByPk(userRoleId);
+        if (!userRole) {
+            return res.status(401).json({
+                error: "Not authorized"
+            });
+        }
+        if (!allowedPermissions.every((allowedPermission) => userRole[allowedPermission] === true)) {
+            return res.status(403).json({
+                error: "Access denied"
+            });
         }
         next();
     };

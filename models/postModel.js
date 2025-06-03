@@ -1,6 +1,6 @@
-import sequelize from '../config/db.js';
-import User from '../models/userModel.js';
-import  { DataTypes } from 'sequelize';
+import sequelize from "../config/db.js";
+import User from "../models/userModel.js";
+import  { DataTypes } from "sequelize";
 import Category from "./categoryModel.js";
 const Post = sequelize.define("posts", {
     id: {
@@ -26,7 +26,7 @@ const Post = sequelize.define("posts", {
         allowNull: false,
         references: {
             model: User,
-            key: 'id'
+            key: "id"
         }
     },
     categoryId: {
@@ -34,7 +34,7 @@ const Post = sequelize.define("posts", {
         allowNull: false,
         references: {
             model: Category,
-            key: 'id'
+            key: "id"
         }
     },
     postImage: {

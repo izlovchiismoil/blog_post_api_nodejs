@@ -17,12 +17,13 @@ import {
     idSchema,
 } from "../middlewares/schemas.js";
 import { idValidate } from "../middlewares/abstractMiddleware.js";
-import { authenticate, checkRole } from "../middlewares/authMiddleware.js";
+import { authenticate, checkPermission } from "../middlewares/authMiddleware.js";
 
-categoryRouter.post("/create", authenticate, checkRole(["admin"]), createCategoryValidate(createCategorySchema), createCategory);
+categoryRouter.post("/create", authenticate, checkPermission(["createCategory"]), createCategoryValidate(createCategorySchema), createCategory);
 categoryRouter.get("/all", getAllCategories);
 categoryRouter.get("/:id", idValidate(idSchema), getCategoryById);
-categoryRouter.patch("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema) ,updateCategoryValidate(updateCategorySchema), updateCategory);
-categoryRouter.delete("/:id", authenticate, checkRole(["admin"]), idValidate(idSchema), deleteCategory);
+categoryRouter.patch("/:id", authenticate, checkPermission(["updateOwnCategory", "updateAnyCategory"]), idValidate(idSchema) ,updateCategoryValidate(updateCategorySchema), updateCategory);
+categoryRouter.delete("/:id", authenticate, checkPermission(["deleteOwnCategory", "deleteAnyCategory"]), idValidate(idSchema), deleteCategory);
+
 
 export default categoryRouter;

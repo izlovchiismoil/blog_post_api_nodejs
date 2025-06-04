@@ -27,7 +27,7 @@ export async function createUserRole (req, res) {
 }
 export async function getUserRoleById (req, res) {
     try {
-        const requestUserRoleId = req.body.userRoleId;
+        const requestUserRoleId = req.params.id;
         if (!requestUserRoleId) {
             return res.status(400).json({
                 error: "Params of user role id does not exist"
@@ -71,9 +71,9 @@ export async function getAllUserRoles (req, res) {
 }
 export async function updateUserRole (req, res) {
     try {
-        const requestUserRoleId = req.params.userRoleId;
-        const requestUserRoleData = req.params.userRoleData;
-        if (!requestUserRoleId) {
+        const requestUserRoleId = req.params.id;
+        const requestUserRole = req.body.userRole;
+        if (!requestUserRoleId || !requestUserRole) {
             return res.status(400).json({
                 error: "Params of user role does not exist"
             });
@@ -84,7 +84,7 @@ export async function updateUserRole (req, res) {
                 error: "User role does not exist"
             });
         }
-        const updatedUserRoleData = await models.userRole.update(requestUserRoleData, {
+        const updatedUserRoleData = await models.userRole.update(requestUserRole, {
             where: {
                 id: requestUserRoleId
             }
@@ -108,7 +108,7 @@ export async function updateUserRole (req, res) {
 }
 export async function deleteUserRole (req, res) {
     try {
-        const requestUserRoleId = req.params.userRoleId;
+        const requestUserRoleId = req.params.id;
         if (!requestUserRoleId) {
             return res.status(400).json({
                 error: "Params of user role does not exist"
@@ -120,14 +120,18 @@ export async function deleteUserRole (req, res) {
                 error: "User role does not exist"
             });
         }
-        const deletedUserRole = await models.userRole.destroy(requestUserRoleId);
+        const deletedUserRole = await models.userRole.destroy({
+            where: {
+                id: requestUserRoleId
+            }
+        });
         if (!deletedUserRole) {
             return res.status(404).json({
                 error: "User role does not exist"
             });
         }
         return res.status(201).send({
-            deletedUserRole
+            deletedUserRoleCount: deletedUserRole
         });
     }
     catch (err) {

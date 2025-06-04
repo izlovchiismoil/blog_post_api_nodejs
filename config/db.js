@@ -1,7 +1,5 @@
 import { Sequelize } from "sequelize";
 
-console.log("Baza paroli: ", process.env.DB_PASSWORD);
-
 const sequelize = new Sequelize("blog_post", "postgres", "123456", {
     dialect: "postgres",
     host: process.env.HOST || "localhost",

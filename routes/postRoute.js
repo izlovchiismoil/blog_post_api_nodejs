@@ -35,7 +35,7 @@ postRouter.get("/author/:id", idValidate(idSchema), getPostsByAuthorId);
 postRouter.get("/category/:id", getPostsByCategoryId);
 postRouter.get("/users/:id/posts", authenticate, idValidate(idSchema), getPostsOfCategoryOfUser);
 postRouter.get("/:id", idValidate(idSchema), getPostById);
-postRouter.patch("/:id", authenticate, checkPermission(["updateOwnPost", "updateAnyPost"]), idValidate(idSchema), updatePostValidate(updatePostSchema), updatePost);
+postRouter.patch("/:id", authenticate, checkPermission(["updateOwnPost"]), idValidate(idSchema), updatePostValidate(updatePostSchema), updatePost);
 postRouter.delete("/:id", authenticate, checkPermission(["deleteOwnPost", "deleteAnyPost"]), idValidate(idSchema), deletePost);
 
 export default postRouter;

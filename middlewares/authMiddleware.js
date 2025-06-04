@@ -35,16 +35,23 @@ export function checkPermission (allowedPermissions) {
                 error: "Not authorized"
             });
         }
-        const userRole = await models.userRole.findByPk(userRoleId);
+        const userRole = await models.userRole.findByPk(userRoleId,{ raw: true});
         if (!userRole) {
             return res.status(401).json({
                 error: "Not authorized"
             });
         }
-        if (!allowedPermissions.every((allowedPermission) => userRole[allowedPermission] === true)) {
-            return res.status(403).json({
-                error: "Access denied"
-            });
+        if (!userRole.isAdmin) {
+            if (!allowedPermissions.every((allowedPermission) => userRole[allowedPermission] === true)) {
+                allowedPermissions.every((allowedPermission) => {
+                    // console.log("Allowed permission: ",allowedPermission);
+                    // console.log("Allowed permission value: ",userRole[allowedPermission]);
+                    return userRole[allowedPermission] === true;
+                });
+                return res.status(403).json({
+                    error: "Access denied"
+                });
+            }
         }
         next();
     };

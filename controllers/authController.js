@@ -71,21 +71,16 @@ export async function logoutUser(req, res) {
 }
 
 export async function refreshToken(req, res) {
-
-    console.log("Kukidagi refresh: ",req.cookies);
     const refreshToken = req.cookies.refreshToken;
-
     if (!refreshToken) {
         return res.status(401).json({ error: "Refresh token required" });
     }
-
     try {
         const decodedToken = await decodeToken(refreshToken);
 
         const newAccessToken = generateAccessToken({ userId: decodedToken.id, userRole: decodedToken.userRole });
 
         return res.status(200).json({ accessToken: newAccessToken });
-
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: err.message });

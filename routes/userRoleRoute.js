@@ -9,10 +9,14 @@ import {
     updateUserRole,
     deleteUserRole
 } from "../controllers/userRoleController.js";
+import {idValidate} from "../middlewares/abstractMiddleware.js";
+import {idSchema} from "../middlewares/schemas.js";
 
 userRoleRouter.post("/create", authenticate, checkPermission(["createUserRole"]), createUserRole);
 userRoleRouter.get("/all", authenticate, checkPermission(["viewAnyUserRole"]), getAllUserRoles);
-userRoleRouter.get("/:id", authenticate, checkPermission(["viewUserRole"]), getUserRoleById);
-userRoleRouter.patch("/:id", authenticate, checkPermission(["updateUserRole"]), updateUserRole);
-userRoleRouter.delete("/:id", authenticate, checkPermission(["deleteUserRole"]), deleteUserRole);
+userRoleRouter.get("/:id", authenticate, checkPermission(["viewUserRole"]), idValidate(idSchema), getUserRoleById);
+userRoleRouter.patch("/:id", authenticate, checkPermission(["updateUserRole"]), idValidate(idSchema), updateUserRole);
+userRoleRouter.delete("/:id", authenticate, checkPermission(["deleteUserRole"]), idValidate(idSchema), deleteUserRole);
 
+
+export default userRoleRouter;

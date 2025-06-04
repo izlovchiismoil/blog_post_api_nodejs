@@ -16,8 +16,8 @@ import postRouter from "./routes/postRoute.js";
 import categoryRouter from "./routes/categoryRoute.js";
 import commentRouter from "./routes/commentRoute.js";
 import authRouter from "./routes/authRoute.js";
+import userRoleRouter from "./routes/userRoleRoute.js";
 import { defaults } from "./utils/defaults.js";
-
 
 app.use(cookieParser());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -69,6 +69,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/comments", commentRouter);
+app.use("/api/v1/roles", userRoleRouter);
 
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3002;

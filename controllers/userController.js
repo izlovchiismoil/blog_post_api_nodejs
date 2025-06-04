@@ -1,5 +1,6 @@
 import models from "../models/indexModel.js";
 import bcryptjs from "bcryptjs";
+import UserRole from "../models/userRoleModel.js";
 
 
 export async function createUser (req, res) {
@@ -28,7 +29,7 @@ export async function createUser (req, res) {
             });
         }
         requestUserData.password = await bcryptjs.hash(requestUserData.password, 10);
-        requestUserData.userRole = requestUserData.userRole.toLowerCase();
+        requestUserData.userRoleId = parseInt(requestUserData.userRoleId);
         const newUser = await models.user.create(requestUserData);
         const createdUser = newUser.toJSON();
         delete createdUser.password;
@@ -53,6 +54,12 @@ export async function getUserById (req, res) {
         }
         const user = await models.user.findByPk(requestUserId, {
             attributes: { exclude: ['password'] },
+            include: [
+                {
+                    model: UserRole,
+                    key: "id"
+                }
+            ],
             raw: true
         });
         if (!user) {

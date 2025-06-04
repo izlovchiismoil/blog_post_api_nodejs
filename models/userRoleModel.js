@@ -155,6 +155,11 @@ const UserRole = sequelize.define("user_roles", {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    isAdmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, { timestamps: true, freezeTableName: true });
 

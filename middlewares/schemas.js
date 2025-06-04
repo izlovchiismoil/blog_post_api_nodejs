@@ -9,7 +9,7 @@ export const idSchema = Joi.object({
 export const createUserSchema = Joi.object({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    userRole: Joi.string().required(),
+    userRoleId: Joi.number().required(),
     username: Joi.string().min(2).required(),
     password: Joi.string().min(4).max(30).required(),
     reEnterPassword: Joi.string().min(4).max(30).required(),
@@ -30,7 +30,6 @@ export const createPostSchema = Joi.object({
     title: Joi.string().required(),
     shortTitle: Joi.string().required(),
     content: Joi.string().required(),
-    authorId: Joi.number().required(),
     categoryId: Joi.number().required(),
     postImage: Joi.string().optional()
 });

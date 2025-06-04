@@ -7,8 +7,14 @@ import Category from '../models/categoryModel.js';
 
 export async function createPost (req, res) {
     try {
+        const requestAuthorId = req.user.id;
         const requestPostData = req.body;
-        const user = await models.user.findByPk(requestPostData.authorId);
+        if (!requestAuthorId || !requestPostData) {
+            return res.status(400).json({
+                error: "Post params not found."
+            });
+        }
+        const user = await models.user.findByPk(requestAuthorId);
         if (!user) {
             return res.status(404).json({
                 error: "User of post not found"
@@ -20,6 +26,7 @@ export async function createPost (req, res) {
                 error: "Post of category not found"
             });
         }
+        requestPostData.authorId = requestAuthorId;
         const createdPost = await models.post.create(requestPostData);
         if (!createdPost) {
             return res.status(422).json({
@@ -41,6 +48,7 @@ export async function updatePost (req, res) {
     try {
         const requestPostId = req.params.id;
         const requestPostData = req.body;
+        console.log(requestPostData);
         const post = await models.post.findByPk(requestPostId);
         if (!post) {
             return res.status(404).json({

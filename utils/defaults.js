@@ -31,7 +31,8 @@ const defaultUserRole = {
     updateUserRole: true,
     deleteUserRole: true,
     viewUserRole: true,
-    viewAnyUserRole: true
+    viewAnyUserRole: true,
+    isAdmin: true
 };
 
 const defaultUser = {

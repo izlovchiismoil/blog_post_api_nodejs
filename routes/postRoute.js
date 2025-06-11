@@ -6,10 +6,10 @@ import {
     getAllPosts,
     getPostById,
     updatePost,
-    getPostsByCategoryId,
     getPostsByAuthorId,
     getPostsOfCategoryOfUser,
-    getPostsByPagination
+    getPostsByPagination,
+    getPostsByCategoryId
 } from "../controllers/postController.js";
 import { idValidate } from "../middlewares/abstractMiddleware.js";
 import {

@@ -213,7 +213,7 @@ export async function getPostsByAuthorId (req, res) {
 }
 export async function getPostsByCategoryId (req, res) {
     try {
-        const requestCategoryId = req.params.id;
+        const requestCategoryId = parseInt(req.params.id);
         const posts = await models.post.findAll({
             where: { categoryId: requestCategoryId },
             include: [
@@ -300,13 +300,14 @@ export async function getPostsOfCategoryOfUser (req, res) {
 export async function getPostsByPagination (req, res) {
     try {
         const currentPage = parseInt(req.query.currentPage) || 1;
-        const limit = parseInt(req.query.limit) || 4;
+        const limit = parseInt(req.query.limit) || 3;
         const offset = (currentPage - 1) * limit;
+
         const { count, rows } = await models.post.findAndCountAll({
             limit,
             offset,
             order: [['createdAt', 'DESC']]
-        });
+        }, { raw: true });
         if ((!count && !rows) || count === 0) {
             return res.status(404).json({
                 error: "Posts not found"

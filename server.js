@@ -17,7 +17,8 @@ import categoryRouter from "./routes/categoryRoute.js";
 import commentRouter from "./routes/commentRoute.js";
 import authRouter from "./routes/authRoute.js";
 import userRoleRouter from "./routes/userRoleRoute.js";
-import { defaults } from "./utils/defaults.js";
+import initialRouter from "./routes/initialRote.js";
+import { initial } from "./utils/initial.js";
 
 app.use(cookieParser());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
@@ -55,8 +56,8 @@ models.comment.sync({ alter: true }).then(comments => {
 }).catch(err => console.log(err));
 
 // Default options
-defaults().then(d => {
-    console.log("All defaults set");
+initial().then(d => {
+    console.log("All initial set");
 }).catch(err => console.log(err));
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -70,9 +71,10 @@ app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/roles", userRoleRouter);
+app.use("/api/v1/initial", initialRouter);
 
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3002;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });

@@ -1,6 +1,5 @@
 import models from "../models/indexModel.js";
 import bcryptjs from "bcryptjs";
-import UserRole from "../models/userRoleModel.js";
 
 
 export async function createUser (req, res) {
@@ -56,11 +55,12 @@ export async function getUserById (req, res) {
             attributes: { exclude: ['password'] },
             include: [
                 {
-                    model: UserRole,
+                    model: models.userRole,
                     key: "id"
                 }
             ],
-            raw: true
+            raw: true,
+            nest: true
         });
         if (!user) {
             return res.status(404).json({
@@ -81,7 +81,15 @@ export async function getUserById (req, res) {
 export async function getAllUsers (req, res) {
     try {
         const users = await models.user.findAll({
-            attributes: { exclude: ['password'], raw: true },
+            attributes: { exclude: ['password'] },
+            include: [
+                {
+                    model: models.userRole,
+                    key: "id"
+                }
+            ],
+            raw: true,
+            nest: true
         });
         if (!users || users.length === 0) {
             return res.status(404).json({

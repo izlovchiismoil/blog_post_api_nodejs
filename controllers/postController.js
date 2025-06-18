@@ -9,6 +9,7 @@ export async function createPost (req, res) {
     try {
         const requestAuthorId = req.user.id;
         const requestPostData = req.body;
+        console.log("Foydalanuvchi ID si:  ", requestAuthorId);
         if (!requestAuthorId || !requestPostData) {
             return res.status(400).json({
                 error: "Post params not found."

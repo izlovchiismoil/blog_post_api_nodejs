@@ -4,7 +4,7 @@ const userRoleRouter = Router();
 import { authenticate, checkPermission } from "../middlewares/authMiddleware.js";
 import {
     createUserRole,
-    getAllUserRoles,
+    getAllRolesOfUser,
     getUserRoleById,
     updateUserRole,
     deleteUserRole
@@ -13,7 +13,7 @@ import {idValidate} from "../middlewares/abstractMiddleware.js";
 import {idSchema} from "../middlewares/schemas.js";
 
 userRoleRouter.post("/create", authenticate, checkPermission(["createUserRole"]), createUserRole);
-userRoleRouter.get("/all", authenticate, checkPermission(["viewAnyUserRole"]), getAllUserRoles);
+userRoleRouter.get("/all", authenticate, checkPermission(["viewAnyUserRole"]), getAllRolesOfUser);
 userRoleRouter.get("/:id", authenticate, checkPermission(["viewUserRole"]), idValidate(idSchema), getUserRoleById);
 userRoleRouter.patch("/:id", authenticate, checkPermission(["updateUserRole"]), idValidate(idSchema), updateUserRole);
 userRoleRouter.delete("/:id", authenticate, checkPermission(["deleteUserRole"]), idValidate(idSchema), deleteUserRole);

@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "tsc src/server.ts"
+    "dev": "nodemon server.js"
   },
   "author": "Ismoil Roxataliyev",
   "license": "ISC",

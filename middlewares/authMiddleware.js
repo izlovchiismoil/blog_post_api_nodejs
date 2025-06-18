@@ -44,8 +44,6 @@ export function checkPermission (allowedPermissions) {
         if (!userRole.isAdmin) {
             if (!allowedPermissions.every((allowedPermission) => userRole[allowedPermission] === true)) {
                 allowedPermissions.every((allowedPermission) => {
-                    // console.log("Allowed permission: ",allowedPermission);
-                    // console.log("Allowed permission value: ",userRole[allowedPermission]);
                     return userRole[allowedPermission] === true;
                 });
                 return res.status(403).json({

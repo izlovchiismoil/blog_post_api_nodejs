@@ -1,0 +1,51 @@
+{
+  "userRole": {
+    "title": "admin",
+    "description": "Administrator has all rights",
+    "isAdmin": true,
+    "Post": {
+      "createPost": "true",
+      "updateOwnPost": true,
+      "updateAnyPost": true,
+      "deleteOwnPost": true,
+      "deleteAnyPost": true,
+      "viewOwnPost": true,
+      "viewAnyPost": true,
+      "publishOwnPost": true,
+      "publishAnyPost": true
+    },
+    "User": {
+      "createUser": true,
+      "updateUser": true,
+      "updateAnyUser": true,
+      "deleteUser": true,
+      "deleteAnyUser": true,
+      "viewUser": true,
+      "viewAnyUser": true
+    },
+    "Category": {
+      "createCategory": true,
+      "updateOwnCategory": true,
+      "updateAnyCategory": true,
+      "deleteOwnCategory": true,
+      "deleteAnyCategory": true,
+      "viewCategory": true,
+      "viewAnyCategory": true
+    },
+    "Role": {
+      "createUserRole": true,
+      "updateUserRole": true,
+      "deleteUserRole": true,
+      "viewUserRole": true,
+      "viewAnyUserRole": true
+    }
+  },
+  "user": {
+    "firstName": "Admin",
+    "lastName": "Admin",
+    "username": "admin",
+    "password": "admin",
+    "imageUrl": null,
+    "userRoleId": null
+  }
+}

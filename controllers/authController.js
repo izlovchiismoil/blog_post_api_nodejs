@@ -15,8 +15,17 @@ export async function loginUser(req, res) {
             });
         }
         const user = await models.user.findOne({
+            attributes: { exclude: ["createdAt", "updatedAt"] },
             where: { username: requestUserData.username },
-            raw: true
+            include: [
+                {
+                    model: models.userRole,
+                    key: "id",
+                    attributes: { exclude: ["createdAt", "updatedAt"] }
+                }
+            ],
+            raw: true,
+            nest: true
         });
         if (!user) {
             return res.status(404).json({
@@ -29,8 +38,8 @@ export async function loginUser(req, res) {
                 error: "Invalid credentials"
             });
         }
-        const accessToken = generateAccessToken({ userId: user.id, userRole: user.userRole });
-        const refreshToken = await generateRefreshToken({ userId: user.id, userRole: user.userRole });
+        const accessToken = generateAccessToken({ userId: user.id, userRoleId: user.user_role.id, userRoleTitle: user.user_role.title, isAdmin: user.user_role.isAdmin });
+        const refreshToken = await generateRefreshToken({ userId: user.id, userRoleId: user.user_role.id, userRoleTitle: user.user_role.title, isAdmin: user.user_role.isAdmin });
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,

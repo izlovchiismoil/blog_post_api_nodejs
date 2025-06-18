@@ -31,6 +31,7 @@ export const createPostSchema = Joi.object({
     shortTitle: Joi.string().required(),
     content: Joi.string().required(),
     categoryId: Joi.number().required(),
+    authorId: Joi.number().required(),
     postImage: Joi.string().optional()
 });
 export const updatePostSchema = Joi.object({

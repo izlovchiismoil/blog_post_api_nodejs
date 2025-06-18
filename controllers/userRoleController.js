@@ -4,17 +4,18 @@ export async function createUserRole (req, res) {
     try {
         const requestUserRole = req.body.userRole;
         if (!requestUserRole) {
-            return res.status(400).send({
+            return res.status(400).json({
                 error: "Params of user role does not exist"
             });
         }
+        requestUserRole.title = requestUserRole.title.toLowerCase();
         const createdUserRole = await models.userRole.create(requestUserRole);
         if (!createdUserRole) {
-            return res.status(422).send({
+            return res.status(500).json({
                 error: "User role not created"
             });
         }
-        return res.status(201).send({
+        return res.status(201).json({
             createdUserRole
         });
     }
@@ -50,7 +51,7 @@ export async function getUserRoleById (req, res) {
         });
     }
 }
-export async function getAllUserRoles (req, res) {
+export async function getAllRolesOfUser (req, res) {
     try {
         const userRoles = await models.userRole.findAll({ raw: true });
         if (!userRoles) {
@@ -95,7 +96,7 @@ export async function updateUserRole (req, res) {
             });
         }
         const updatedUserRole = await models.userRole.findByPk(requestUserRoleId);
-        return res.status(201).send({
+        return res.status(201).json({
             updatedUserRole
         });
     }
@@ -130,7 +131,7 @@ export async function deleteUserRole (req, res) {
                 error: "User role does not exist"
             });
         }
-        return res.status(201).send({
+        return res.status(201).json({
             deletedUserRoleCount: deletedUserRole
         });
     }

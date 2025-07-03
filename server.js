@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(urlencoded({ extended: false }));
 app.use(express.json());
-import models from "./models/indexModel.js";
+import { sequelize } from "./models/indexModel.js";
 import userRouter from "./routes/userRoute.js";
 import postRouter from "./routes/postRoute.js";
 import categoryRouter from "./routes/categoryRoute.js";
@@ -37,28 +37,18 @@ app.use(cors({
     credentials: true
 }));
 
-models.userRole.sync({ alter: true });
 
-models.user.sync({ alter: true }).then(user => {
-    console.log(user);
-}).catch(err => console.log(err));
+sequelize.sync({ alter: true })
+    .then(() => {
+        console.log("All tables created successfully");
+        initial().then(d => {
+            console.log("All initial set");
+        }).catch(err => console.log(err));
+}).catch((err) => {
+    console.error(err);
+});
 
-models.post.sync({ alter: true }).then(post => {
-    console.log(post);
-}).catch(err => console.log(err));
 
-models.category.sync({ alter: true }).then(categories => {
-    console.log(categories);
-}).catch(err => console.log(err));
-
-models.comment.sync({ alter: true }).then(comments => {
-    console.log(comments);
-}).catch(err => console.log(err));
-
-// Default options
-initial().then(d => {
-    console.log("All initial set");
-}).catch(err => console.log(err));
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

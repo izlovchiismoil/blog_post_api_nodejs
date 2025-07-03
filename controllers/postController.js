@@ -1,8 +1,5 @@
 import { Op } from "sequelize";
-import models from '../models/indexModel.js';
-import Post from '../models/postModel.js';
-import User from '../models/userModel.js';
-import Category from '../models/categoryModel.js';
+import models from "../models/indexModel.js";
 
 
 export async function createPost (req, res) {
@@ -65,7 +62,7 @@ export async function updatePost (req, res) {
         const updatedPost = await models.post.findByPk(requestPostId,{
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id",
                     attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
                 }
@@ -107,15 +104,15 @@ export async function deletePost (req, res) {
 }
 export async function getAllPosts (req, res) {
     try {
-        const posts = await Post.findAll({
+        const posts = await models.post.findAll({
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id",
                     attributes: { exclude: ["password"] }
                 },
                 {
-                    model: Category,
+                    model: models.category,
                     key: "id"
                 }
             ],
@@ -144,12 +141,12 @@ export async function getPostById (req, res) {
         const post = await models.post.findByPk(requestPostId, {
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id",
                     attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
                 },
                 {
-                    model: Category,
+                    model: models.category,
                     key: "id",
                     attributes: { exclude: ["createdAt", "updatedAt"] }
                 }
@@ -185,11 +182,11 @@ export async function getPostsByAuthorId (req, res) {
             where: { authorId: requestAuthorId },
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id",
                 },
                 {
-                    model: Category,
+                    model: models.category,
                     key: "id"
                 }
             ],
@@ -219,12 +216,12 @@ export async function getPostsByCategoryId (req, res) {
             where: { categoryId: requestCategoryId },
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id",
                     attributes: { exclude: ["password", "createdAt", "updatedAt", "profileImage"] }
                 },
                 {
-                    model: Category,
+                    model: models.category,
                     key: "id",
                     attributes: {exclude: ["createdAt", "updatedAt"] }
                 }
@@ -270,11 +267,11 @@ export async function getPostsOfCategoryOfUser (req, res) {
             },
             include: [
                 {
-                    model: User,
+                    model: models.user,
                     key: "id"
                 },
                 {
-                    model: Category,
+                    model: models.category,
                     key: "id",
                     attributes: {exclude: ["createdAt", "updatedAt"] }
                 }
@@ -307,7 +304,7 @@ export async function getPostsByPagination (req, res) {
         const { count, rows } = await models.post.findAndCountAll({
             limit,
             offset,
-            order: [['createdAt', 'DESC']]
+            order: [["createdAt", "DESC"]]
         }, { raw: true });
         if ((!count && !rows) || count === 0) {
             return res.status(404).json({

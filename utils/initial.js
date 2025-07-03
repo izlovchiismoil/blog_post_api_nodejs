@@ -2,49 +2,6 @@ import models from "../models/indexModel.js";
 import bcryptjs from "bcryptjs";
 import fs from "fs";
 
-// export const initialUserRole = {
-//     title: "admin",
-//     description: "Administrator has all rights",
-//     createPost: true,
-//     updateOwnPost: true,
-//     updateAnyPost: true,
-//     deleteOwnPost: true,
-//     deleteAnyPost: true,
-//     viewOwnPost: true,
-//     viewAnyPost: true,
-//     publishOwnPost: true,
-//     publishAnyPost: true,
-//     createUser: true,
-//     updateUser: true,
-//     updateAnyUser: true,
-//     deleteUser: true,
-//     deleteAnyUser: true,
-//     viewUser: true,
-//     viewAnyUser: true,
-//     createCategory: true,
-//     updateOwnCategory: true,
-//     updateAnyCategory: true,
-//     deleteOwnCategory: true,
-//     deleteAnyCategory: true,
-//     viewCategory: true,
-//     viewAnyCategory: true,
-//     createUserRole: true,
-//     updateUserRole: true,
-//     deleteUserRole: true,
-//     viewUserRole: true,
-//     viewAnyUserRole: true,
-//     isAdmin: true
-// };
-
-// const initialUser = {
-//     firstName: "Admin",
-//     lastName: "Admin",
-//     username: process.env.SUPER_USERNAME || "admin",
-//     password: process.env.SUPER_PASSWORD || "admin",
-//     imageUrl: null,
-//     userRoleId: null
-// };
-
 const initialFileData = JSON.parse(fs.readFileSync("initial.json", "utf8"));
 
 const initialUserRole = Object.keys(initialFileData.userRole).reduce((acc, curr) => {

@@ -1,28 +1,31 @@
-import User from "./userModel.js";
-import Post from "./postModel.js";
-import Category from "./categoryModel.js";
-import Comment from "./commentModel.js";
-import UserRole from "./userRoleModel.js";
-const models = {};
+import sequelize from "../config/db.js";
+import { Sequelize } from "sequelize";
+import userModel from "./userModel.js";
+import userRoleModel from "./userRoleModel.js";
+import categoryModel from "./categoryModel.js";
+import postModel from "./postModel.js";
+import commentModel from "./commentModel.js";
+const models = {
+    user: userModel(sequelize, Sequelize),
+    userRole: userRoleModel(sequelize, Sequelize),
+    category: categoryModel(sequelize, Sequelize),
+    post:  postModel(sequelize, Sequelize),
+    comment: commentModel(sequelize, Sequelize)
+};
 
-UserRole.hasMany(User, { foreignKey: "userRoleId" });
-User.belongsTo(UserRole, { foreignKey: "userRoleId" });
+models.userRole.hasMany(models.user, { foreignKey: "userRoleId" });
+models.user.belongsTo(models.userRole, { foreignKey: "userRoleId" });
 
-User.hasMany(Post, { foreignKey: 'authorId' });
-Post.belongsTo(User, { foreignKey: 'authorId' });
+models.user.hasMany(models.post, { foreignKey: "authorId" });
+models.post.belongsTo(models.user, { foreignKey: "authorId" });
 
-Category.hasMany(Post, { foreignKey: 'categoryId' });
-Post.belongsTo(Category, { foreignKey: 'categoryId' });
+models.category.hasMany(models.post, { foreignKey: "categoryId" });
+models.post.belongsTo(models.category, { foreignKey: "categoryId" });
 
-Post.hasMany(Comment, { foreignKey: 'postId' });
-Comment.belongsTo(Post, { foreignKey: 'postId' });
+models.post.hasMany(models.comment, { foreignKey: "postId" });
+models.comment.belongsTo(models.post, { foreignKey: "postId" });
 
 
-models.user = User;
-models.post = Post;
-models.category = Category;
-models.comment = Comment;
-models.userRole = UserRole;
-
+export { sequelize };
 
 export default models;

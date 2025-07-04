@@ -4,7 +4,7 @@
     "description": "Administrator has all rights",
     "isAdmin": true,
     "Post": {
-      "createPost": "true",
+      "createPost": true,
       "updateOwnPost": true,
       "updateAnyPost": true,
       "deleteOwnPost": true,

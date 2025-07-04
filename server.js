@@ -38,7 +38,7 @@ app.use(cors({
 }));
 
 
-sequelize.sync({ alter: true })
+sequelize.sync({ force: true })
     .then(() => {
         console.log("All tables created successfully");
         initial().then(d => {
